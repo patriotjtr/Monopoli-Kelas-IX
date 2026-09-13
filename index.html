@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monopoli IPS Kelas IX - PTK Pembelajaran Interaktif</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-yellow: #FFD54F;
+            --accent-blue: #4FC3F7;
+            --accent-green: #81C784;
+            --accent-orange: #FF8A65;
+            --dark-blue: #0288D1;
+            --bg-color: #E0F7FA;
+            --card-bg: #FFFFFF;
+            --text-color: #263238;
+        }
+
+        * {
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+        }
+
+        .container {
+            background: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 600px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+            border: 4px solid var(--dark-blue);
+        }
+
+        h1, h2, h3 {
+            text-align: center;
+            color: #01579B;
+            margin-bottom: 15px;
+        }
+
+        .header-title {
+            font-size: 1.3rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .screen {
+            display: none;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* Form Styling */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"], textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #B0BEC5;
+            border-radius: 10px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        input[type="text"]:focus, textarea:focus, select:focus {
+            border-color: var(--dark-blue);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-top: 10px;
+        }
+
+        .btn:active {
+            transform: translateY(2px);
+            box-shadow: none;
+        }
+
+        .btn-yellow { background-color: var(--primary-yellow); color: #5D4037; }
+        .btn-blue { background-color: var(--accent-blue); color: #01579B; }
+        .btn-orange { background-color: var(--accent-orange); color: white; }
+        .btn-green { background-color: var(--accent-green); color: #1B5E20; }
+        .btn-danger { background-color: #E57373; color: white; }
+
+        /* Dashboard Game Mode */
+        .dashboard-card {
+            background: #E1F5FE;
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            margin-bottom: 20px;
+            border: 2px dashed var(--dark-blue);
+        }
+
+        .balance-label {
+            font-size: 0.9rem;
+            color: #0277BD;
+            font-weight: 600;
+        }
+
+        .balance-amount {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #2E7D32;
+        }
+
+        .game-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .card-choice {
+            padding: 20px 10px;
+            border-radius: 15px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            border: 3px solid rgba(0,0,0,0.1);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 120px;
+        }
+
+        .card-kesempatan { background-color: #FFF9C4; color: #F57F17; }
+        .card-tantangan { background-color: #FFCCBC; color: #BF360C; }
+
+        /* Timer Badge */
+        .timer-badge {
+            background-color: #FF7043;
+            color: white;
+            font-weight: 700;
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 15px;
+            font-size: 1rem;
+            float: right;
+        }
+
+        /* Question Box */
+        .question-box {
+            background: #F5F5F5;
+            border-left: 5px solid var(--dark-blue);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 1rem;
+            line-height: 1.5;
+            clear: both;
+        }
+
+        .options-list {
+            list-style: none;
+        }
+
+        .options-list li {
+            margin-bottom: 10px;
+        }
+
+        .options-list label {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: #ECEFF1;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        .options-list input {
+            margin-right: 10px;
+        }
+
+        .badge-type {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <!-- SCREEN 1: INPUT KELOMPOK -->
+    <div id="screen-setup" class="screen active">
+        <h1 class="header-title">🎮 Monopoli IPS Kelas IX</h1>
+        <p style="text-align: center; margin-bottom: 20px; color: #546E7A;">Nenek Moyang, Jalur Rempah, Perdagangan Internasional & Masyarakat Majemuk</p>
+        
+        <div class="form-group">
+            <label for="group-name">Nama Kelompok:</label>
+            <input type="text" id="group-name" placeholder="Misal: Kelompok Nusantara">
+        </div>
+        
+        <div class="form-group">
+            <label for="member-names">Nama Anggota Kelompok (pisahkan dengan koma):</label>
+            <textarea id="member-names" rows="3" placeholder="Misal: Andi, Budi, Siti, Dewi"></textarea>
+        </div>
+
+        <button class="btn btn-yellow" onclick="startGame()">Masuk Game Mode 🚀</button>
+    </div>
+
+    <!-- SCREEN 2: DASHBOARD GAME MODE -->
+    <div id="screen-dashboard" class="screen">
+        <h2 id="display-group-name">Nama Kelompok</h2>
+        
+        <div class="dashboard-card">
+            <div class="balance-label">TOTAL UANG MONOPOLI</div>
+            <div class="balance-amount" id="display-balance">Rp 0</div>
+        </div>
+
+        <h3>Pilih Kartu Permainan:</h3>
+        <div class="game-options">
+            <div class="card-choice card-kesempatan" onclick="selectCardType('Kesempatan')">
+                <span>❓ KARTU KESEMPATAN</span>
+                <small style="font-weight: normal; font-size: 0.8rem; margin-top: 5px;">PG (Hadiah Rp 500)</small>
+            </div>
+            <div class="card-choice card-tantangan" onclick="selectCardType('Tantangan')">
+                <span>⚡ KARTU TANTANGAN</span>
+                <small style="font-weight: normal; font-size: 0.8rem; margin-top: 5px;">Uraian (Hadiah Rp 1.000)</small>
+            </div>
+        </div>
+
+        <button class="btn btn-danger" onclick="resetGame()" style="margin-top: 20px;">Selesaikan Permainan / Reset 🔄</button>
+    </div>
+
+    <!-- SCREEN 3: PILIH PEMAIN -->
+    <div id="screen-select-player" class="screen">
+        <h2>Siapa yang Menjawab?</h2>
+        <span class="badge-type" id="badge-card-type" style="background-color: var(--dark-blue);">Kartu</span>
+        
+        <div class="form-group" style="margin-top: 15px;">
+            <label for="select-player">Pilih Nama Anggota:</label>
+            <select id="select-player">
+                <!-- Option diisi dinamis oleh JS -->
+            </select>
+        </div>
+
+        <button class="btn btn-blue" onclick="openQuestion()">Buka Soal 📜</button>
+        <button class="btn btn-danger" onclick="goToDashboard()" style="background: none; color: #78909C; box-shadow: none;">Batal</button>
+    </div>
+
+    <!-- SCREEN 4: SOAL & ANSWER -->
+    <div id="screen-question" class="screen">
+        <div class="timer-badge">⏱️ <span id="timer-display">02:00</span></div>
+        <span class="badge-type" id="question-card-type" style="background-color: #000;">Tipe</span>
+        
+        <div style="clear: both;"></div>
+        
+        <div class="question-box" id="question-text">
+            Teks pertanyaan akan muncul di sini...
+        </div>
+
+        <!-- Container Jawab PG -->
+        <div id="container-pg" style="display: none;">
+            <ul class="options-list" id="pg-options">
+                <!-- Option PG diisi JS -->
+            </ul>
+        </div>
+
+        <!-- Container Jawab Essai -->
+        <div id="container-essai" style="display: none;">
+            <div class="form-group">
+                <label for="essai-answer">Jawaban Kamu:</label>
+                <textarea id="essai-answer" rows="4" placeholder="Tuliskan jawaban singkat/penjelasan lengkapmu..."></textarea>
+            </div>
+        </div>
+
+        <button class="btn btn-green" onclick="submitAnswer()">Kirim Jawaban 📩</button>
+    </div>
+
+</div>
+
+<script>
+    // --- DATABASE SOAL (IPS KELAS IX) ---
+    const dataKesempatanPG = [
+        { id: 1, q: "Teori yang menyatakan bahwa nenek moyang bangsa Indonesia berasal dari wilayah Yunnan, Tiongkok Selatan, disebut ....", options: ["A. Teori Nusantara", "B. Teori Yunnan", "C. Teori Out of Africa", "D. Teori Out of Australia"], key: "B" },
+        { id: 2, q: "Salah satu teori yang menjelaskan bahwa manusia modern berasal dari Afrika kemudian menyebar ke berbagai wilayah dunia adalah ....", options: ["A. Out of Africa", "B. Yunnan", "C. Nusantara", "D. Out of Europe"], key: "A" },
+        { id: 3, q: "Gelombang migrasi yang dianggap membawa kebudayaan Neolitikum ke wilayah Indonesia adalah ....", options: ["A. migrasi bangsa Eropa", "B. migrasi bangsa Austronesia", "C. migrasi bangsa Romawi", "D. migrasi bangsa Arab"], key: "B" },
+        { id: 4, q: "Salah satu dampak dari persebaran nenek moyang terhadap kehidupan masyarakat Indonesia adalah ....", options: ["A. munculnya keragaman budaya", "B. hilangnya seluruh budaya lokal", "C. terbentuknya satu bahasa daerah", "D. berkurangnya interaksi antarmasyarakat"], key: "A" },
+        { id: 5, q: "Seorang siswa menemukan bahwa beberapa masyarakat di Indonesia memiliki kemiripan bahasa dengan masyarakat di wilayah Asia Tenggara dan Pasifik. Informasi tersebut dapat digunakan untuk mempelajari ....", options: ["A. perkembangan industri Indonesia", "B. persebaran masyarakat Austronesia", "C. perkembangan perdagangan modern", "D. pembentukan kerajaan Islam"], key: "B" },
+        { id: 6, q: "Sebuah masyarakat di daerah pesisir memiliki tradisi pelayaran dan menggunakan perahu sebagai sarana utama untuk berpindah antarpulau. Aktivitas tersebut dapat dikaitkan dengan kemampuan nenek moyang bangsa Indonesia dalam ....", options: ["A. bercocok tanam di pegunungan", "B. melakukan pelayaran dan migrasi", "C. mengembangkan industri modern", "D. membangun jaringan kereta api"], key: "B" },
+        { id: 7, q: "Jika suatu kelompok masyarakat memiliki tradisi, bahasa, dan bentuk kesenian yang berbeda dengan kelompok masyarakat lain, kondisi tersebut dapat dijelaskan sebagai salah satu dampak ....", options: ["A. persebaran dan interaksi antarkelompok masyarakat", "B. perkembangan teknologi digital", "C. urbanisasi modern", "D. perdagangan nasional"], key: "A" },
+        { id: 8, q: "Masyarakat A dan masyarakat B memiliki perbedaan bahasa dan kebiasaan. Mereka kemudian melakukan kerja sama dalam kegiatan ekonomi. Sikap yang paling tepat untuk mencegah perbedaan tersebut berkembang menjadi konflik adalah ....", options: ["A. menghilangkan budaya masyarakat A", "B. mengutamakan kepentingan salah satu kelompok", "C. membangun komunikasi dan saling menghargai", "D. membatasi interaksi kedua masyarakat"], key: "C" },
+        { id: 9, q: "Jalur rempah Nusantara berkembang karena Indonesia memiliki ....", options: ["A. wilayah gurun yang luas", "B. berbagai jenis rempah bernilai ekonomi tinggi", "C. industri berat terbesar di dunia", "D. cadangan minyak terbesar dunia"], key: "B" },
+        { id: 10, q: "Salah satu fungsi utama jalur rempah pada masa lalu adalah ....", options: ["A. sebagai jalur pertukaran barang dan budaya", "B. sebagai jalur khusus perpindahan penduduk modern", "C. sebagai jalur transportasi udara", "D. sebagai jalur komunikasi digital"], key: "A" },
+        { id: 11, q: "Rempah-rempah dari Nusantara memiliki nilai tinggi dalam perdagangan dunia karena ....", options: ["A. hanya dapat digunakan sebagai bahan bangunan", "B. memiliki manfaat sebagai bumbu, obat, dan kebutuhan lainnya", "C. tidak dapat ditemukan di wilayah lain", "D. tidak memiliki nilai ekonomi"], key: "B" },
+        { id: 12, q: "Sebuah daerah bekas pelabuhan perdagangan rempah memiliki bangunan bersejarah dan berbagai peninggalan perdagangan masa lalu. Upaya yang paling tepat untuk memanfaatkan potensi tersebut adalah ....", options: ["A. menghilangkan bangunan lama", "B. mengembangkan wisata sejarah jalur rempah", "C. menutup kawasan dari masyarakat", "D. mengganti seluruh peninggalan dengan bangunan modern"], key: "B" },
+        { id: 13, q: "Jalur rempah tidak hanya menyebabkan pertukaran barang, tetapi juga pertukaran budaya. Contoh penerapan konsep tersebut dalam kehidupan saat ini adalah ....", options: ["A. masyarakat mempelajari makanan dan kesenian dari daerah lain", "B. masyarakat hanya menggunakan budaya daerah sendiri", "C. perdagangan dilakukan tanpa interaksi manusia", "D. masyarakat menolak budaya dari luar"], key: "A" },
+        { id: 14, q: "Perdagangan internasional adalah kegiatan ....", options: ["A. pertukaran barang antaranggota keluarga", "B. pertukaran barang dan jasa antarnegara", "C. pertukaran barang dalam satu desa", "D. kegiatan produksi untuk kebutuhan sendiri"], key: "B" },
+        { id: 15, q: "Salah satu faktor pendorong perdagangan internasional adalah ....", options: ["A. perbedaan sumber daya alam", "B. kesamaan seluruh kebutuhan negara", "C. tidak adanya perkembangan teknologi", "D. tertutupnya hubungan antarnegara"], key: "A" },
+        { id: 16, q: "Salah satu faktor yang dapat menghambat perdagangan internasional adalah ....", options: ["A. perkembangan teknologi komunikasi", "B. perbedaan sumber daya alam", "C. konflik dan ketegangan antarnegara", "D. kemajuan transportasi"], key: "C" },
+        { id: 17, q: "Kegiatan menjual barang atau jasa ke negara lain disebut ....", options: ["A. impor", "B. ekspor", "C. konsumsi", "D. distribusi"], key: "B" },
+        { id: 18, q: "Indonesia memiliki hasil perkebunan yang melimpah, sedangkan negara lain membutuhkan produk tersebut. Bentuk kegiatan perdagangan yang tepat dilakukan Indonesia adalah ....", options: ["A. impor", "B. ekspor", "C. konsumsi", "D. barter lokal"], key: "B" },
+        { id: 19, q: "Indonesia mengimpor mesin dari negara lain karena teknologi produksi mesin tersebut belum berkembang secara optimal di dalam negeri. Faktor pendorong perdagangan internasional dalam kasus tersebut adalah ....", options: ["A. perbedaan teknologi", "B. persamaan sumber daya", "C. kesamaan iklim", "D. persamaan tingkat pendapatan"], key: "A" },
+        { id: 20, q: "Pemerintah menetapkan pajak terhadap barang tertentu yang berasal dari luar negeri. Kebijakan tersebut dikenal sebagai ....", options: ["A. tarif", "B. subsidi", "C. kuota", "D. dumping"], key: "A" },
+        { id: 21, q: "Pemerintah memberikan bantuan kepada produsen dalam negeri agar mampu bersaing dengan produk impor. Kebijakan tersebut merupakan ....", options: ["A. tarif", "B. subsidi", "C. kuota impor", "D. embargo"], key: "B" },
+        { id: 22, q: "Produk pakaian dari luar negeri masuk ke Indonesia dengan harga relatif murah. Konsumen mendapatkan lebih banyak pilihan, tetapi sebagian produsen pakaian lokal mengalami penurunan penjualan. Analisis yang tepat terhadap kondisi tersebut adalah ....", options: ["A. perdagangan internasional hanya memberikan keuntungan", "B. perdagangan internasional hanya memberikan kerugian", "C. perdagangan internasional memberikan manfaat bagi konsumen tetapi meningkatkan persaingan bagi produsen lokal", "D. perdagangan internasional tidak berpengaruh terhadap perekonomian"], key: "C" },
+        { id: 23, q: "Indonesia mengekspor kopi dalam bentuk biji mentah, kemudian negara lain mengolahnya menjadi produk kopi siap konsumsi dengan harga jauh lebih tinggi. Masalah yang dapat dianalisis dari kondisi tersebut adalah ....", options: ["A. Indonesia tidak memiliki sumber daya alam", "B. Indonesia belum mengoptimalkan nilai tambah produk", "C. ekspor selalu merugikan Indonesia", "D. produk mentah memiliki nilai lebih tinggi"], key: "B" },
+        { id: 24, q: "Suatu negara membatasi jumlah barang impor yang masuk untuk melindungi produsen dalam negeri. Kebijakan tersebut disebut ....", options: ["A. subsidi", "B. kuota", "C. tarif", "D. promosi"], key: "B" },
+        { id: 25, q: "Masyarakat majemuk adalah masyarakat yang ....", options: ["A. memiliki satu kebudayaan yang sama", "B. terdiri atas berbagai kelompok dengan perbedaan tertentu", "C. tidak memiliki aturan sosial", "D. hanya terdiri atas satu kelompok sosial"], key: "B" },
+        { id: 26, q: "Salah satu ciri masyarakat majemuk adalah adanya ....", options: ["A. keberagaman suku, agama, budaya, dan kelompok sosial", "B. keseragaman pekerjaan", "C. kesamaan bahasa daerah", "D. kesamaan adat istiadat"], key: "A" },
+        { id: 27, q: "Di sebuah kelas terdapat siswa dari berbagai suku dan daerah. Untuk membangun integrasi, kegiatan yang paling tepat dilakukan adalah ....", options: ["A. membentuk kelompok berdasarkan suku", "B. menghindari pembicaraan tentang perbedaan", "C. melakukan kegiatan bersama dengan pembagian tugas yang adil", "D. meminta semua siswa meninggalkan budaya daerahnya"], key: "C" },
+        { id: 28, q: "Keberagaman masyarakat dapat menjadi sumber konflik apabila ....", options: ["A. masyarakat memiliki sikap toleransi", "B. terdapat komunikasi dan kerja sama", "C. berkembang prasangka dan sikap diskriminatif", "D. masyarakat menghargai perbedaan"], key: "C" },
+        { id: 29, q: "“Agar masyarakat Indonesia bersatu, semua masyarakat harus memiliki budaya yang sama.” Penilaian yang paling tepat terhadap pernyataan tersebut adalah ....", options: ["A. benar, karena persatuan hanya dapat tercapai melalui keseragaman", "B. benar, karena keberagaman selalu menyebabkan konflik", "C. kurang tepat, karena integrasi dapat dibangun dengan tetap mempertahankan keberagaman", "D. salah, karena budaya tidak berhubungan dengan integrasi"], key: "C" },
+        { id: 30, q: "Sebuah sekolah ingin meningkatkan integrasi antarsiswa. Salah satu usulan adalah membuat kegiatan kelompok yang anggotanya sengaja berasal dari latar belakang yang beragam. Menurutmu, kebijakan tersebut ....", options: ["A. tepat karena dapat mendorong interaksi dan kerja sama antarsiswa", "B. tidak tepat karena siswa sebaiknya hanya bekerja dengan teman dekat", "C. tidak tepat karena keberagaman harus dihindari", "D. tepat hanya untuk siswa yang memiliki kemampuan akademik sama"], key: "A" }
+    ];
+
+    const dataTantanganEssai = [
+        { id: 1, q: "Jelaskan pengertian teori asal-usul nenek moyang bangsa Indonesia dan sebutkan minimal tiga teori yang berkembang dalam pembahasan sejarah Indonesia." },
+        { id: 2, q: "Jelaskan secara singkat perbedaan antara teori Yunnan, teori Nusantara, dan teori Out of Africa dalam menjelaskan asal-usul manusia atau nenek moyang yang menghuni wilayah Indonesia." },
+        { id: 3, q: "Apa yang dimaksud dengan persebaran nenek moyang secara geografis? Jelaskan faktor yang memungkinkan terjadinya persebaran tersebut." },
+        { id: 4, q: "Jelaskan hubungan antara migrasi nenek moyang dengan munculnya keragaman masyarakat Indonesia." },
+        { id: 5, q: "Kamu menemukan bahwa suatu daerah memiliki bahasa, tradisi, dan kesenian yang memiliki kemiripan dengan daerah lain di luar Indonesia. Bagaimana informasi tersebut dapat digunakan untuk mempelajari sejarah persebaran nenek moyang?" },
+        { id: 6, q: "Nenek moyang bangsa Indonesia dikenal memiliki kemampuan berlayar. Berikan contoh bagaimana kemampuan tersebut dapat memengaruhi perkembangan kehidupan masyarakat Indonesia." },
+        { id: 7, q: "Di lingkungan sekolah terdapat siswa dari berbagai latar belakang suku dan budaya. Bagaimana kamu dapat menerapkan pemahaman tentang keberagaman akibat persebaran penduduk untuk membangun hubungan yang baik dengan teman?" },
+        { id: 8, q: "Berikan contoh aktivitas nenek moyang yang masih memberikan pengaruh terhadap kehidupan bangsa Indonesia saat ini. Jelaskan hubungan aktivitas tersebut dengan kehidupan masyarakat sekarang." },
+        { id: 9, q: "Analisislah hubungan antara kondisi geografis kepulauan Indonesia dengan proses migrasi dan persebaran nenek moyang bangsa Indonesia." },
+        { id: 10, q: "Persebaran manusia dari satu wilayah ke wilayah lain dapat menghasilkan pertemuan berbagai budaya. Analisislah dampak positif dan negatif dari kondisi tersebut terhadap kehidupan masyarakat." },
+        { id: 11, q: "Perbedaan budaya, bahasa, dan kebiasaan dapat memperkaya kehidupan masyarakat, tetapi juga dapat menimbulkan konflik. Analisislah mengapa hal tersebut dapat terjadi." },
+        { id: 12, q: "Dua kelompok masyarakat memiliki kebiasaan yang berbeda dalam menjalankan kegiatan sosial. Masing-masing kelompok menganggap kebiasaannya paling baik sehingga mulai muncul saling mengejek. Analisislah faktor yang menyebabkan konflik sosial dalam kasus tersebut dan jelaskan cara mencegah konflik berkembang." },
+        { id: 13, q: "Jelaskan mengapa Nusantara memiliki posisi penting dalam jalur perdagangan rempah dunia." },
+        { id: 14, q: "Sebutkan minimal tiga jenis rempah yang menjadi komoditas penting dalam perdagangan Nusantara pada masa lalu dan jelaskan nilai pentingnya." },
+        { id: 15, q: "Jelaskan dua dampak jalur rempah terhadap kehidupan masyarakat Nusantara." },
+        { id: 16, q: "Jika kamu menjadi pengelola daerah yang memiliki peninggalan jalur rempah, program apa yang akan kamu buat untuk memperkenalkan sejarah jalur rempah kepada generasi muda? Jelaskan alasanmu." },
+        { id: 17, q: "Jelaskan pengertian perdagangan internasional dan berikan dua contohnya." },
+        { id: 18, q: "Sebutkan dan jelaskan minimal empat faktor yang mendorong terjadinya perdagangan internasional." },
+        { id: 19, q: "Sebutkan minimal tiga faktor yang dapat menghambat perdagangan internasional dan jelaskan pengaruhnya." },
+        { id: 20, q: "Indonesia memiliki hasil perkebunan yang melimpah, sedangkan negara lain memiliki teknologi pengolahan yang lebih maju. Jelaskan bentuk kerja sama perdagangan yang dapat dilakukan agar kedua negara memperoleh keuntungan." },
+        { id: 21, q: "Suatu produk Indonesia memiliki kualitas baik tetapi sulit masuk ke pasar negara lain karena adanya aturan impor yang ketat. Apa yang sebaiknya dilakukan oleh pemerintah dan produsen Indonesia untuk mengatasi kondisi tersebut?" },
+        { id: 22, q: "Pemerintah memberikan subsidi kepada produsen dalam negeri agar produknya dapat bersaing dengan produk impor. Jelaskan manfaat kebijakan tersebut bagi perekonomian Indonesia." },
+        { id: 23, q: "Analisislah hubungan antara perbedaan sumber daya alam dengan terjadinya perdagangan internasional." },
+        { id: 24, q: "Perdagangan internasional dapat memberikan dampak positif dan negatif. Analisislah masing-masing tiga dampak positif dan tiga dampak negatif perdagangan internasional bagi Indonesia." },
+        { id: 25, q: "Produk impor yang murah dapat meningkatkan pilihan konsumen tetapi sekaligus memberikan tekanan kepada produsen lokal. Analisislah bagaimana kondisi tersebut dapat memengaruhi perekonomian Indonesia." },
+        { id: 26, q: "Menurut pendapatmu, apakah Indonesia sebaiknya membatasi barang impor untuk melindungi produk dalam negeri? Evaluasilah kebijakan tersebut dengan mempertimbangkan kepentingan produsen dan konsumen." },
+        { id: 27, q: "Indonesia masih banyak mengekspor beberapa komoditas dalam bentuk bahan mentah. Evaluasilah apakah kebijakan tersebut sudah menguntungkan Indonesia dalam jangka panjang. Berikan alasanmu." },
+        { id: 28, q: "Jelaskan pengertian masyarakat majemuk dan sebutkan minimal empat ciri masyarakat majemuk." },
+        { id: 29, q: "Sebuah kelas terdiri atas siswa dengan perbedaan suku, agama, bahasa, kemampuan, dan kebiasaan. Jelaskan tiga tindakan nyata yang dapat dilakukan untuk menciptakan integrasi di kelas tersebut." },
+        { id: 30, q: "Dalam sebuah masyarakat terdapat berbagai kelompok suku dan agama. Pada awalnya hubungan antarkelompok berjalan baik. Namun, setelah beredar informasi yang tidak benar mengenai salah satu kelompok, muncul prasangka, saling menyalahkan, dan penolakan untuk bekerja sama. Analisislah dampaknya terhadap integrasi nasional." }
+    ];
+
+    // --- STATE MANAGEMENT ---
+    let groupData = {
+        name: "",
+        members: [],
+        balance: 0
+    };
+
+    let poolKesempatan = [];
+    let poolTantangan = [];
+    let selectedCardType = "";
+    let activeQuestion = null;
+    let timerInterval = null;
+    let timeLeft = 120; // 2 Menit
+
+    // TEMPELKAN URL APPS SCRIPT KAMU DI SINI
+    const SCRIPT_URL = "PASTE_URL_WEB_APP_ANDA_DI_SINI"; 
+
+    // Helper: Shuffle Array
+    function shuffle(array) {
+        let currentIndex = array.length, randomIndex;
+        while (currentIndex != 0) {
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+            [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+        }
+        return array;
+    }
+
+    // Inisialisasi Pool Soal
+    function initQuestionPools() {
+        poolKesempatan = shuffle([...dataKesempatanPG]);
+        poolTantangan = shuffle([...dataTantanganEssai]);
+    }
+
+    function showScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(screenId).classList.add('active');
+    }
+
+    function startGame() {
+        const nameInput = document.getElementById('group-name').value.trim();
+        const membersInput = document.getElementById('member-names').value.trim();
+
+        if (!nameInput || !membersInput) {
+            alert("Harap isi nama kelompok dan daftar anggota terlebih dahulu!");
+            return;
+        }
+
+        groupData.name = nameInput;
+        groupData.members = membersInput.split(',').map(m => m.trim()).filter(m => m.length > 0);
+        groupData.balance = 0;
+
+        initQuestionPools();
+        updateDashboard();
+        showScreen('screen-dashboard');
+    }
+
+    function updateDashboard() {
+        document.getElementById('display-group-name').innerText = groupData.name;
+        document.getElementById('display-balance').innerText = `Rp ${groupData.balance}`;
+    }
+
+    function selectCardType(type) {
+        selectedCardType = type;
+        const selectElem = document.getElementById('select-player');
+        selectElem.innerHTML = "";
+
+        groupData.members.forEach(m => {
+            const opt = document.createElement('option');
+            opt.value = m;
+            opt.innerText = m;
+            selectElem.appendChild(opt);
+        });
+
+        const badge = document.getElementById('badge-card-type');
+        badge.innerText = `Kartu ${type}`;
+        badge.style.backgroundColor = type === 'Kesempatan' ? '#F57F17' : '#BF360C';
+
+        showScreen('screen-select-player');
+    }
+
+    function openQuestion() {
+        showScreen('screen-question');
+        
+        const badge = document.getElementById('question-card-type');
+        badge.innerText = `Kartu ${selectedCardType}`;
+        badge.style.backgroundColor = selectedCardType === 'Kesempatan' ? '#F57F17' : '#BF360C';
+
+        if (selectedCardType === 'Kesempatan') {
+            document.getElementById('container-pg').style.display = 'block';
+            document.getElementById('container-essai').style.display = 'none';
+
+            if (poolKesempatan.length === 0) {
+                poolKesempatan = shuffle([...dataKesempatanPG]); // Re-shuffle jika habis
+            }
+            activeQuestion = poolKesempatan.pop();
+            renderPG(activeQuestion);
+
+        } else {
+            document.getElementById('container-pg').style.display = 'none';
+            document.getElementById('container-essai').style.display = 'block';
+            document.getElementById('essai-answer').value = "";
+
+            if (poolTantangan.length === 0) {
+                poolTantangan = shuffle([...dataTantanganEssai]); // Re-shuffle jika habis
+            }
+            activeQuestion = poolTantangan.pop();
+            renderEssai(activeQuestion);
+        }
+
+        startTimer();
+    }
+
+    function renderPG(qData) {
+        document.getElementById('question-text').innerText = qData.q;
+        const optionsContainer = document.getElementById('pg-options');
+        optionsContainer.innerHTML = "";
+
+        qData.options.forEach(opt => {
+            const letter = opt.substring(0, 1);
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <label>
+                    <input type="radio" name="pg-choice" value="${letter}">
+                    ${opt}
+                </label>
+            `;
+            optionsContainer.appendChild(li);
+        });
+    }
+
+    function renderEssai(qData) {
+        document.getElementById('question-text').innerText = qData.q;
+    }
+
+    function startTimer() {
+        clearInterval(timerInterval);
+        timeLeft = 120;
+        updateTimerDisplay();
+
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            updateTimerDisplay();
+
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                alert("Waktu habis! Jawaban dianggap salah/tidak menjawab dan tidak mendapatkan poin.");
+                submitAnswer(true);
+            }
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        const mins = Math.floor(timeLeft / 60);
+        const secs = timeLeft % 60;
+        document.getElementById('timer-display').innerText = 
+            `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    function submitAnswer(isTimeout = false) {
+        clearInterval(timerInterval);
+
+        const currentPlayer = document.getElementById('select-player').value;
+        let answerText = "";
+        let status = "Salah";
+        let rewardAmount = 0;
+
+        if (selectedCardType === 'Kesempatan') {
+            const selectedOpt = document.querySelector('input[name="pg-choice"]:checked');
+            if (!selectedOpt && !isTimeout) {
+                alert("Pilih salah satu jawaban terlebih dahulu!");
+                startTimer();
+                return;
+            }
+            answerText = selectedOpt ? selectedOpt.value : "TIDAK MENJAWAB (WAKTU HABIS)";
+            
+            // SKOR KESEMPATAN (PG): Rp 500 jika BENAR, Rp 0 jika SALAH
+            if (selectedOpt && selectedOpt.value === activeQuestion.key) {
+                status = "Benar";
+                rewardAmount = 500;
+            } else {
+                status = selectedOpt ? "Salah" : "Waktu Habis";
+                rewardAmount = 0;
+            }
+        } else {
+            const textAns = document.getElementById('essai-answer').value.trim();
+            if (!textAns && !isTimeout) {
+                alert("Tuliskan jawaban terlebih dahulu!");
+                startTimer();
+                return;
+            }
+            
+            // SKOR TANTANGAN (URAIAN): Rp 1.000 jika MENJAWAB, Rp 0 jika TIDAK MENJAWAB
+            if (textAns) {
+                answerText = textAns;
+                status = "Menjawab Uraian";
+                rewardAmount = 1000;
+            } else {
+                answerText = "TIDAK MENJAWAB (WAKTU HABIS)";
+                status = "Waktu Habis";
+                rewardAmount = 0;
+            }
+        }
+
+        groupData.balance += rewardAmount;
+
+        const payload = {
+            waktu: new Date().toLocaleString('id-ID'),
+            kelompok: groupData.name,
+            namaSiswa: currentPlayer,
+            tipeKartu: selectedCardType,
+            pertanyaan: activeQuestion.q,
+            jawaban: answerText,
+            status: status,
+            reward: `Rp ${rewardAmount}`
+        };
+
+        sendToSpreadsheet(payload);
+
+        if (rewardAmount > 0) {
+            alert(`Jawaban tercatat! [${status}] Kelompok kamu mendapatkan Rp ${rewardAmount}.`);
+        } else {
+            alert(`Jawaban tercatat! [${status}] Kamu tidak mendapatkan tambahan uang.`);
+        }
+
+        updateDashboard();
+        showScreen('screen-dashboard');
+    }
+
+    function sendToSpreadsheet(data) {
+        if (SCRIPT_URL === "PASTE_URL_WEB_APP_ANDA_DI_SINI") {
+            console.warn("URL Web App Apps Script belum dipasang. Data hanya diproses secara lokal.");
+            return;
+        }
+
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        }).catch(err => console.error("Gagal mengirim ke Sheets:", err));
+    }
+
+    function goToDashboard() {
+        clearInterval(timerInterval);
+        showScreen('screen-dashboard');
+    }
+
+    function resetGame() {
+        if (confirm("Apakah kamu yakin ingin menyelesaikan permainan? Semua data saldo kelompok akan kembali ke Rp 0.")) {
+            clearInterval(timerInterval);
+            document.getElementById('group-name').value = "";
+            document.getElementById('member-names').value = "";
+            groupData = { name: "", members: [], balance: 0 };
+            showScreen('screen-setup');
+        }
+    }
+</script>
+
+</body>
+</html>
